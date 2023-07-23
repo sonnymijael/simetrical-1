@@ -30,6 +30,8 @@ const semantic_constraints = (
   }
 
   if (min > 0) rules.minLength = {value: min, message: `cannot be less than ${min} characters.`}
+  if (required === 'Phone is required.') rules.pattern = {value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/, message: 'Invalid phone number'}
+
   return rules
 }
 
@@ -38,7 +40,7 @@ const RegistrationForm: React.FC = () => {
 
   const onSubmit = (data: FormData) => {
     console.log(data)
-    toast.success('Registro completado!.')
+    toast.success('Registration completed!.')
     reset()
   }
 
@@ -51,6 +53,7 @@ const RegistrationForm: React.FC = () => {
         <Grid item xs={12} md={6}> 
           <TextField
             label="Name(s)"
+            autoComplete="off"
             {...register('firstName', semantic_constraints('Name(s) is required.'))}
             error={!!errors.firstName}
             helperText={errors.firstName ? errors.firstName.message : ''}
@@ -67,6 +70,7 @@ const RegistrationForm: React.FC = () => {
         <Grid item xs={12} md={6}> 
           <TextField
             label="Surname(s)"
+            autoComplete="off"
             placeholder='Arce'
             {...register('lastName', semantic_constraints('Surname(s) is required.'))}
             helperText={errors.lastName ? errors.lastName.message : ''}
