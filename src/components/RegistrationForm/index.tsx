@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 // Hooks
 import { useForm } from 'react-hook-form'
 // Components
-import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material'
+import { Button, Grid, TextField, InputAdornment, Typography, IconButton } from '@mui/material'
 import { toast } from 'react-toastify'
 // Icons
 import EmailIcon from '@mui/icons-material/Email'
 import LockIcon from '@mui/icons-material/Lock'
 import PhoneIcon from '@mui/icons-material/Phone'
 import PersonIcon from '@mui/icons-material/Person'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 type FormData = {
   firstName: string
@@ -37,6 +39,8 @@ const semantic_constraints = (
 
 const RegistrationForm: React.FC = () => {
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm<FormData>()
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const onSubmit = (data: FormData) => {
     console.log(data)
@@ -121,7 +125,7 @@ const RegistrationForm: React.FC = () => {
         <Grid item xs={12} md={6}> 
           <TextField
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder='********'
             {...register('password', { 
               required: {value: true, message: 'Please enter your password'}, 
@@ -142,13 +146,23 @@ const RegistrationForm: React.FC = () => {
                   <LockIcon />
                 </InputAdornment>
               ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           />
         </Grid>
         <Grid item xs={12} md={6}> 
           <TextField
             label="Repeat Password"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             placeholder='********'
             {...register('confirmPassword', {
               required: "You must confirm your password",
@@ -160,6 +174,16 @@ const RegistrationForm: React.FC = () => {
               startAdornment: (
                 <InputAdornment position="start">
                   <LockIcon />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
                 </InputAdornment>
               ),
             }}
